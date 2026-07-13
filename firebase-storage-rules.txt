@@ -1,0 +1,48 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // assignment submissions 폴더: 로그인한 사용자만 업로드 가능
+    match /assignment-submissions/{assignmentId}/{teamId}/{fileName} {
+      allow read: if request.auth != null; // 로그인한 사용자만 다운로드 가능
+      allow write: if request.auth != null 
+        && request.resource.size < 20 * 1024 * 1024; // 20MB 제한만 적용
+    }
+    
+    // lecture assignments 폴더: 로그인한 사용자만 업로드 가능
+    match /lecture-assignments/{lectureNoteId}/{teamId}/{fileName} {
+      allow read: if request.auth != null; // 로그인한 사용자만 다운로드 가능
+      allow write: if request.auth != null 
+        && request.resource.size < 20 * 1024 * 1024; // 20MB 제한 적용
+    }
+    
+    // lecture notes 폴더: 로그인한 사용자만 업로드/다운로드 가능
+    match /lecture-notes/{workspaceId}/{lectureNoteId}/{fileName} {
+      allow read: if request.auth != null; // 로그인한 사용자만 다운로드 가능
+      allow write: if request.auth != null 
+        && request.resource.size < 10 * 1024 * 1024; // 10MB 제한 (lectureService.ts에서 설정한 제한과 동일)
+    }
+    
+    // simple task submissions 폴더: 로그인한 사용자만 업로드/다운로드 가능
+    match /simple-task-submissions/{lectureNoteId}/{teamId}/{fileName} {
+      allow read: if request.auth != null; // 로그인한 사용자만 다운로드 가능
+      allow write: if request.auth != null 
+        && request.resource.size < 20 * 1024 * 1024; // 20MB 제한
+    }
+    
+    // simple lecture attachments 폴더: 로그인한 사용자만 업로드/다운로드/삭제 가능
+    match /simple-lecture-attachments/{lectureNoteId}/{fileName} {
+      allow read, write, delete: if request.auth != null; // 로그인한 사용자만 모든 작업 가능
+    }
+    
+    // individual submissions 폴더: 개별 제출용, 로그인한 사용자만 업로드/다운로드/삭제 가능
+    match /individual-submissions/{lectureNoteId}/{userId}/{fileName} {
+      allow read, write, delete: if request.auth != null 
+        && request.resource.size < 20 * 1024 * 1024; // 20MB 제한
+    }
+    
+    // 임시 테스트용: 모든 파일에 대한 권한 (보안상 권장하지 않음)
+    match /{allPaths=**} {
+      allow read, write, delete: if request.auth != null;
+    }
+  }
+}
