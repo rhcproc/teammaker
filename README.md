@@ -42,6 +42,13 @@ yarn dev -p 3001
 
 ## Firebase configuration
 
+> **Important:** The Firebase API key and configuration committed to this
+> repository are for testing only. Before running or deploying your own copy,
+> replace them with the configuration for a Firebase project that you control.
+> Update both `src/services/firebase/config.ts` and
+> `public/google-auth.html`; do not use the included test project for your own
+> application or production data.
+
 Firebase is initialized in `src/services/firebase/config.ts`. The current
 configuration points to the existing `shufflemates-ce09a` Firebase project.
 That legacy project ID is intentional: renaming this Git repository does not
