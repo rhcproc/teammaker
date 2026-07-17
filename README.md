@@ -6,6 +6,22 @@ TeamMaker is a Next.js application for creating balanced teams, saving them as
 workspaces, and coordinating team activities. It uses Firebase Authentication,
 Cloud Firestore, and Cloud Storage for accounts and persistent workspace data.
 
+## Security warning
+
+> **This repository is not production-ready and has not been security audited.**
+> It contains the Firebase web configuration for a shared test project in
+> client-side code. Anyone who loads the application or reads the repository can
+> obtain and reuse that configuration. Do not store production data in the
+> included Firebase project or deploy this application as-is.
+
+Firebase web API keys are identifiers intended to be present in browser code;
+moving the key to a frontend environment variable does **not** make it secret.
+Security must instead be enforced with restrictive Firestore and Storage rules,
+Firebase Authentication, API-key restrictions, authorized domains, App Check,
+least-privilege access, and usage/billing monitoring. Create and secure your own
+Firebase project before deployment, and keep genuine secrets and privileged
+operations on a trusted backend.
+
 ## Features
 
 - Randomized team formation with configurable group sizes
@@ -42,8 +58,8 @@ yarn dev -p 3001
 
 ## Firebase configuration
 
-> **Important:** The Firebase API key and configuration committed to this
-> repository are for testing only. Before running or deploying your own copy,
+> **Important:** The exposed Firebase API key and configuration committed to
+> this repository are for testing only. Before running or deploying your own copy,
 > replace them with the configuration for a Firebase project that you control.
 > Update both `src/services/firebase/config.ts` and
 > `public/google-auth.html`; do not use the included test project for your own
